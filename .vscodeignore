@@ -1,0 +1,14 @@
+**/*.map
+**/*.ts
+**/.eslintrc.json
+**/tsconfig.json
+.gitignore
+.vscode-test/**
+.vscode/**
+.yarnrc
+CHANGELOG.md
+Makefile
+demo/**
+docs/**
+out/test/**
+src/**

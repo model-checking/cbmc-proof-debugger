@@ -1,0 +1,151 @@
+{
+  "name": "proof-debugger",
+  "displayName": "Proof debugger",
+  "description": "Debug error traces produced by cbmc.",
+  "publisher": "mrtuttle",
+  "version": "0.0.1",
+  "repository": "https://gitlab.aws.dev/cbmc/proof-debugger",
+  "engines": {
+    "vscode": "^1.53.0"
+  },
+  "categories": [
+    "Debuggers"
+  ],
+  "activationEvents": [
+    "onDebug",
+    "onCommand:proofDebugger.helloWorld",
+    "onCommand:proofDebugger.setTraceFolder",
+    "onCommand:proofDebugger.showTraceFolder",
+    "onCommand:proofDebugger.showTraceName",
+    "onCommand:traceView.refresh"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "proof-debugger-trace-container",
+          "title": "Proof debugger",
+          "icon": "none"
+        }
+      ]
+    },
+    "views": {
+      "proof-debugger-trace-container": [
+        {
+          "id": "proof-debugger-trace-view",
+          "name": "Traces"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "proofDebugger.load",
+        "title": "Proof debugger: Load extension"
+      },
+      {
+        "command": "proofDebugger.setTraceFolderDialog",
+        "title": "Proof debugger: Set Trace Folder"
+      },
+      {
+        "command": "proofDebugger.showTraceFolder",
+        "title": "Proof debugger: Show Trace Folder"
+      },
+      {
+        "command": "proofDebugger.showTraceName",
+        "title": "Proof debugger: Show Trace Name"
+      },
+      {
+        "command": "traceView.refresh",
+        "title": "Load Traces"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "traceView.refresh",
+          "when": "view == proof-debugger-trace-view",
+          "group": "navigation"
+        }
+      ]
+    },
+    "debuggers": [
+      {
+        "type": "proof-debugger",
+        "label": "Proof debugger",
+        "program": "./out/proof-debugger-adapter.js",
+        "runtime": "node",
+        "languages": [
+          "c",
+          "rust"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [],
+            "properties": {
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": true
+              },
+              "trace": {
+                "type": "boolean",
+                "description": "Enable logging of the Debug Adapter Protocol.",
+                "default": true
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "proof-debugger",
+            "request": "launch",
+            "name": "Proof debugger debug",
+            "stopOnEntry": true
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Proof debugger: Launch",
+            "description": "A configuration for debugging an error trace produced by cbmc.",
+            "body": {
+              "type": "proof-debugger",
+              "request": "launch",
+              "name": "Proof debugger",
+              "stopOnEntry": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.4",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.7.13",
+    "@types/vscode": "^1.53.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "@vscode/test-electron": "^2.1.3",
+    "console": "^0.7.2",
+    "eslint": "^7.32.0",
+    "glob": "^7.1.7",
+    "mocha": "^9.1.1",
+    "typescript": "^4.5.5",
+    "typescript-formatter": "^7.2.2",
+    "vsce": "^2.6.3"
+  },
+  "dependencies": {
+    "@vscode/debugadapter": "^1.51.1",
+    "@vscode/debugprotocol": "^1.51.0",
+    "await-notify": "^1.0.1"
+  }
+}
