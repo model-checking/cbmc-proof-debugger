@@ -1,0 +1,55 @@
+name: Release CBMC proof debugger
+
+# A new release is triggered by a new tag of the form debugger-VERSION.
+
+# GitHub has deprecated actions/create-release
+# https://github.com/actions/create-release
+#
+# GitHub recommends four actions including
+#   softprops/action-gh-release is highly rated but includes deprecated code
+#     https://github.com/softprops/action-gh-release
+#   ncipollo/release-action@v1
+#     https://github.com/ncipollo/release-action
+
+on:
+  push:
+    tags:
+      - debugger-*
+
+jobs:
+  Release:
+    name: Release proof debugger
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get version numbers
+        run: |
+          # The environment variable GITHUB_REF is refs/tags/debugger-*
+          echo "PACKAGE_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+          echo "TAG_VERSION=$(echo ${{ github.ref }} | cut -d "/" -f 3 | cut -d "-" -f 2)" >> $GITHUB_ENV
+      - name: Compare version numbers
+        run: |
+          if [[ ${{ env.PACKAGE_VERSION }} != ${{ env.TAG_VERSION }} ]]; then
+            echo "Package version ${{env.PACKAFGE_VERSION}} does not match tag version ${{env.TAG_VERSION}}"
+            exit 1
+          fi
+
+      - name: Create package
+        run: make setup-ubuntu package
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "*.vsix"
+          artifactContentType: application/zip
+          body: |
+            This release is CBMC Proof Debugger version ${{ env.TAG_VERSION }}.  For the latest release, go to the [Marketplace](https://marketplace.visualstudio.com/vscode) for Visual Studio Code extensions.
+
+            To install this release, download the package `proof-debugger-${{ env.TAG_VERSION }}.vsix` below and install it with
+
+            ```
+            code --install-extension proof-debugger-${{ env.TAG_VERSION }}.vsix
+            ```
