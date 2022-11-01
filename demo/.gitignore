@@ -1,0 +1,4 @@
+*.goto
+*.xml
+*.json
+/report/
