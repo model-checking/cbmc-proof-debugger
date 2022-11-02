@@ -1,5 +1,10 @@
-default:
-	./node_modules/.bin/vsce package
+VSCE=./node_modules/.bin/vsce
+
+package default:
+	$(VSCE) package
+
+publish:
+	$(VSCE) publish
 
 install:
 	code --install-extension proof-debugger-*.vsix
@@ -16,4 +21,13 @@ veryclean: clean
 	$(RM) src/*.js
 	$(RM) *.vsix
 
-.PHONY: default install format clean veryclean
+setup-macos:
+	brew install node
+	npm install
+
+setup-ubuntu:
+	sudo apt install nodejs npm
+	npm install
+
+.PHONY: default package publish install format clean veryclean
+.PHONY: setup-macos setup-ubuntu
