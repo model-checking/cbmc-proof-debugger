@@ -3,8 +3,8 @@
   "displayName": "Proof debugger",
   "description": "Debug error traces produced by cbmc.",
   "publisher": "mrtuttle",
-  "version": "0.0.1",
-  "repository": "https://gitlab.aws.dev/cbmc/proof-debugger",
+  "version": "0.1.0",
+  "repository": "https://github.com/model-checking/cbmc-proof-debugger",
   "engines": {
     "vscode": "^1.53.0"
   },
