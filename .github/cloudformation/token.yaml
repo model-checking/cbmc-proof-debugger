@@ -13,6 +13,10 @@ Parameters:
     Type: String
     Description: GitHub repository for the cbmc-proof-debugger
     Default: cbmc-proof-debugger
+  PublicationTag:
+    Type: String
+    Description: GitHub tag triggering the GitHub publication workflow
+    Default: debugger-*
 
 Resources:
 
@@ -44,7 +48,7 @@ Resources:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
               StringLike:
                 token.actions.githubusercontent.com:sub:
-                  !Sub repo:${GithubRepoOrganization}/${GithubRepoName}:*
+                  !Sub repo:${GithubRepoOrganization}/${GithubRepoName}:ref:refs/tags/${PublicationTag}
 
       Policies:
         - PolicyName: PublisherTokenAccess
