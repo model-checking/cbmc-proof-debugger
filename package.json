@@ -1,8 +1,8 @@
 {
-  "name": "proof-debugger",
-  "displayName": "Proof debugger",
+  "name": "cbmc-proof-debugger",
+  "displayName": "CBMC proof debugger",
   "description": "Debug error traces produced by cbmc.",
-  "publisher": "mrtuttle",
+  "publisher": "model-checking",
   "version": "0.1.0",
   "repository": "https://github.com/model-checking/cbmc-proof-debugger",
   "engines": {
