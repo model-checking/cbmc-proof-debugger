@@ -34,7 +34,7 @@ loads the json summaries produced by CBMC Viewer,
 and lets a developer explore the error traces produced by CBMC using
 the Visual Studio Code's debugger.
 
-The [user guide]() includes a [simple demonstration]() of the debugger.
+The [user guide](https://model-checking.github.io/cbmc-proof-debugger/user-guide) includes a [simple demonstration](https://model-checking.github.io/cbmc-proof-debugger/demo) of the debugger.
 
 ## Security
 
