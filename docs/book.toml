@@ -3,4 +3,4 @@ authors = ["Mark R. Tuttle"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Proof debugger"
+title = "CBMC Proof Debugger"
