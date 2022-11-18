@@ -79,5 +79,5 @@ jobs:
 
       - name: Publish release
         run: |
-          VSCE_PAT=$(aws secretsmanager get-secret-value --secret-id $PAT_ID | jq -r '.SecretString')
+          export VSCE_PAT=$(aws secretsmanager get-secret-value --secret-id $PAT_ID | jq -r '.SecretString')
           make publish
