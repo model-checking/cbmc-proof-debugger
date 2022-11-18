@@ -1,0 +1,595 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>CBMC Proof Debugger</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> CBMC Proof Debugger</a></li><li class="chapter-item expanded "><a href="user-guide/index.html"><strong aria-hidden="true">2.</strong> User guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user-guide/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="user-guide/configuration.html"><strong aria-hidden="true">2.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="demo/index.html"><strong aria-hidden="true">2.3.</strong> Demonstration</a></li></ol></li><li class="chapter-item expanded "><a href="developer-guide/index.html"><strong aria-hidden="true">3.</strong> Developer guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="developer-guide/installation.html"><strong aria-hidden="true">3.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="developer-guide/architecture.html"><strong aria-hidden="true">3.2.</strong> Architecture</a></li><li class="chapter-item expanded "><a href="developer-guide/implementation.html"><strong aria-hidden="true">3.3.</strong> Implementation</a></li></ol></li><li class="chapter-item expanded "><a href="faq/index.html"><strong aria-hidden="true">4.</strong> Frequently asked questions</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CBMC Proof Debugger</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="cbmc-proof-debugger"><a class="header" href="#cbmc-proof-debugger">CBMC Proof Debugger</a></h1>
+<p>The
+<a href="https://github.com/model-checking/cbmc-proof-debugger">CBMC Proof Debugger</a>
+is a
+<a href="https://code.visualstudio.com/">Visual Studio Code</a>
+debugger for
+<a href="https://github.com/diffblue/cbmc">CBMC</a>
+error traces.</p>
+<p><a href="https://github.com/diffblue/cbmc">CBMC</a>
+is a model checker for C.  CBMC will explore all possible paths
+through your code on all possible inputs, and will check that all
+assertions in your code are true. CBMC can also check for the
+possibility of security issues (like buffer overflow) and for
+instances of undefined behavior (like signed integer overflow).
+If CBMC finds a code issue, it generates an error trace demonstrating how that
+issue could occur.
+If CBMC terminates without finding any issues, the result is
+assurance that your code behaves as expected.
+CBMC is a <em>bounded</em> model checker, however, so getting CBMC to terminate
+may require restricting inputs to some bounded size,
+and CBMC's assurance is restricted to these bounded inputs.</p>
+<p><a href="https://github.com/model-checking/cbmc-viewer">CBMC Viewer</a>
+is a tool that scans the output of CBMC and produces a browsable summary
+of its findings, making it easy to root cause the issues CBMC finds using
+any web browser.  Viewer also produces a summary of its findings in the
+form of a collection of json blobs.</p>
+<p>The
+<a href="https://github.com/model-checking/cbmc-proof-debugger">CBMC Proof Debugger</a>
+loads the json summaries produced by CBMC Viewer,
+and lets a developer explore the error traces produced by CBMC using
+the Visual Studio Code's debugger.</p>
+<p>To get started, see our</p>
+<ul>
+<li><a href="user-guide/installation.html">installation instructions</a> and a</li>
+<li><a href="demo">simple demonstration</a> of how to use the proof debugger.</li>
+</ul>
+<p>References:</p>
+<ul>
+<li><a href="user-guide">User guide</a></li>
+<li><a href="developer-guide">Developer guide</a></li>
+<li><a href="faq">Frequently asked questions</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="user-guide"><a class="header" href="#user-guide">User guide</a></h1>
+<p>This is the start of a user guide for the CBMC Proof Debugger.</p>
+<ul>
+<li><a href="user-guide/installation.html">Installation</a></li>
+<li><a href="user-guide/configuration.html">Configuration</a></li>
+<li><a href="user-guide/../demo">Demonstration</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<h2 id="install-the-debugger"><a class="header" href="#install-the-debugger">Install the debugger</a></h2>
+<p>Most people should install the debugger from within Visual Studio Code:</p>
+<ul>
+<li>
+<p>Click on the Extensions icon in the Activity Bar on the left.</p>
+<p><img src="https://code.visualstudio.com/assets/docs/editor/extension-marketplace/extensions-view-icon.png"
+     alt="Extensions icon"></p>
+</li>
+<li>
+<p>Search for &quot;CBMC Proof Debugger.&quot;</p>
+</li>
+<li>
+<p>Click on &quot;CBMC Proof Debugger.&quot;</p>
+</li>
+<li>
+<p>Click on &quot;Install.&quot;</p>
+</li>
+</ul>
+<p>For more information, read about
+<a href="https://code.visualstudio.com/docs/editor/extension-marketplace">installing extensions</a>
+from the Extension Marketplace.</p>
+<p>You can also install the debugger from the project release page:</p>
+<ul>
+<li>Open the
+<a href="https://github.com/model-checking/cbmc-proof-debugger/releases/latest">release page</a>.</li>
+<li>Download the package <code>cbmc-proof-debugger-*.vsix</code> at the bottom of the page.</li>
+<li>Run <code>code --install-extension cbmc-proof-debugger-*.vsix</code> to install the package.</li>
+</ul>
+<p>You can safely ignore the deprecation warning about the Buffer class.</p>
+<h2 id="uninstall-the-debugger"><a class="header" href="#uninstall-the-debugger">Uninstall the debugger</a></h2>
+<p>To uninstall the debugger from within Visual Studio Code,</p>
+<ul>
+<li>click on the Extensions icon in the Activity Bar on the left,</li>
+<li>click on &quot;CBMC Proof Debugger,&quot; and</li>
+<li>click on &quot;Uninstall.&quot;</li>
+</ul>
+<p>To uninstall the debugger from the command line, run</p>
+<pre><code>code --uninstall-extension model-checking.cbmc-proof-debugger
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p>To create a debugger configuration for the CBMC Proof Debugger, click on
+the Run and Debug icon</p>
+<p><img src="user-guide/run-and-debug-icon.png" alt="Run and Debug icon"
+     style="height: 40px; margin: auto; display: block;"></p>
+<p>in the Activity Bar on the left.</p>
+<ul>
+<li>
+<p>If you have already configured some debuggers like lldb, you will see
+a drop-down list of configured debuggers</p>
+<p><img src="user-guide/debugger-list.png" alt="Configured debuggers"
+     style="height: 40px; margin: auto; display: block;"></p>
+<p>Expand the drop-down list, click on &quot;Add Configuration,&quot; click on
+&quot;CBMC Proof Debugger&quot; in the list of available debuggers,
+and save the <code>launch.json</code> configuration file.</p>
+</li>
+<li>
+<p>If you are configuring your first debugger, you will see the Run view</p>
+<p><img src="https://code.visualstudio.com/assets/docs/editor/debugging/launch-configuration.png"
+     alt="Run start view"
+     style="height: 400px; margin: auto; display: block;"></p>
+<p>Click on &quot;create a launch.json file&quot; and select &quot;CBMC Proof Debugger&quot;
+from the list of available debuggers,
+and save the <code>launch.json</code> configuration file.</p>
+</li>
+</ul>
+<p>For more information, read about
+<a href="https://code.visualstudio.com/docs/editor/debugging#_launch-configurations">launch configurations</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="demonstration"><a class="header" href="#demonstration">Demonstration</a></h1>
+<p>This is a simple demonstration of the CBMC Proof Debugger.</p>
+<ul>
+<li>Follow the CBMC
+<a href="https://model-checking.github.io/cbmc-training/installation.html">installation</a>
+instructions to install CBMC and CBMC-related tools.</li>
+<li>Follow the debugger <a href="demo/../user-guide/installation.html">installation</a>
+instructions to add the debugger to Visual Studio Code.</li>
+<li>Clone the debugger code repository and change to the demo directory
+<pre><code>git clone https://github.com/model-checking/cbmc-proof-debugger
+cd cbmc-proof-debugger/demo
+</code></pre>
+This directory contains a simple project consisting of a
+<a href="demo/proof-debugger/demo/Makefile">Makefile</a> and two source files
+<a href="demo/demo/foo.c">foo.c</a> and <a href="demo/demo/main.c">main.c</a>.</li>
+<li>Run CBMC on the source code
+<pre><code>make
+</code></pre>
+This will run <code>goto-cc</code> to compile the source code for CBMC,
+run <code>cbmc</code> to do bounded model checking on the source code with CBMC, and
+run <code>cbmc-viewer</code> to produce a browsable summary of the CBMC findings.</li>
+<li>Just for fun, open the browsable summary in a web browser and look around.
+On MacOS, do
+<pre><code>open report/html/index.html
+</code></pre>
+The <code>report</code> directory produced by <code>cbmc-viewer</code>
+actually contains two subdirectories:
+<ul>
+<li><code>html</code> contains the browsable summary.</li>
+<li><code>json</code> contains some JSON files that are summaries of artifacts produced
+by CBMC.</li>
+</ul>
+</li>
+</ul>
+<p>Now let's run the debugger on the error traces produced by CBMC.
+In the <code>demo</code> project directory:</p>
+<ul>
+<li>
+<p>Open Visual Studio Code.</p>
+<pre><code>code .
+</code></pre>
+</li>
+<li>
+<p>Configure the debugger for this project using the
+<a href="demo/../user-guide/configuration.html">configuration</a> instructions.</p>
+</li>
+<li>
+<p>Open the proof debugger console:  At the bottom of the screen, click on
+the console name &quot;Proof Debugger.&quot;
+(If you don't see any consoles at the bottom
+of the screen, click on &quot;View -&gt; Terminal&quot; to make them visible.)</p>
+</li>
+<li>
+<p>Load the error traces:  On the right of the debugger console, click on
+&quot;Load Traces,&quot; navigate to the folder <code>demo/report/json</code> in the dialog
+window, and click on &quot;Open.&quot;</p>
+</li>
+<li>
+<p>Select the trace you want to debug: Clicking on the failure description
+for the failure you want to debug.  For example, under Line 3,
+click on &quot;dereference failure: pointer NULL in *ptr.&quot;</p>
+</li>
+<li>
+<p>Start the debugger:  Click on the &quot;debug and run&quot; icon on the left,
+and select the &quot;CBMC Proof Debugger&quot; from the drop-down list of available
+debuggers at the top, and press the green &quot;start&quot; icon to the left of
+&quot;CBMC Proof Debugger.&quot;</p>
+</li>
+</ul>
+<p>Now you can see the familiar debugger interface. In particular, you can see
+the debugger toolbar at the top of the screen.</p>
+<p><img src="demo/debugger-toolbar.png" alt="Debugger toolbar"
+     style="height: 40px; margin: auto; display: block;"></p>
+<p>The icons left-to-right are:</p>
+<ul>
+<li>Run forwards</li>
+<li>Step over forwards</li>
+<li>Step into function</li>
+<li>Step out of function</li>
+<li>Step over backwards</li>
+<li>Run backwards</li>
+<li>Restart the debugger</li>
+<li>Halt the debugger</li>
+</ul>
+<p>For more information, read about
+<a href="https://code.visualstudio.com/docs/editor/debugging">debugging</a>.</p>
+<p>Now you can use the debugger interface to examine the program behavior
+determined by the error trace just as you would to examine the program
+behavior determined by a set of input values.</p>
+<ul>
+<li>You can run forward to run until the failure occurs, examine
+the program stack, and step forwards and backwards to examine the
+code leading up to the failure.</li>
+<li>You can set a break point and run forwards or backwards to a break point.</li>
+<li>You can examine data in any stack frame, any static variable, and any
+heap object by clicking in the data view on the left.  In particular,
+for structured data like strings, arrays, and structs, you can click
+on a value to open it up and expose data components.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="developer-guide"><a class="header" href="#developer-guide">Developer guide</a></h1>
+<p>This is the start of a developer guide for the CBMC Proof Debugger.</p>
+<ul>
+<li><a href="developer-guide/installation.html">Installation</a></li>
+<li><a href="developer-guide/architecture.html">Architecture</a></li>
+<li><a href="developer-guide/implementation.html">Implementation</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation-1"><a class="header" href="#installation-1">Installation</a></h1>
+<p>Clone the debugger code repository with</p>
+<pre><code>git clone https://github.com/model-checking/cbmc-proof-debugger
+cd cbmc-proof-debugger
+</code></pre>
+<p>Install Node.js and all TypeScript/JavaScript dependencies with</p>
+<pre><code>make setup-macos
+</code></pre>
+<p>or</p>
+<pre><code>make setup-ubuntu
+</code></pre>
+<p>depending on your operating system and package management tools.</p>
+<p>On other platforms, you can download a Node.js installer for your platform
+from the <a href="https://nodejs.org/en/download">Node.js download page</a>,
+and the remaining setup steps in the Makefile should work.
+If you learn how to build and install this package on your platform,
+please submit a <a href="https://github.com/model-checking/cbmc-proof-debugger/pulls">pull request</a> to contribute your instructions.</p>
+<p>From this point, the following targets will be helpful</p>
+<ul>
+<li><code>make package</code> builds the extension package.</li>
+<li><code>make install</code> installs the extension package into Visual Studio Code.</li>
+<li><code>make publish</code> publishes the extension package to the Extension Marketplace.</li>
+<li><code>make format</code> runs the TypeScript formatter to standardize formatting.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
+<p>This is a description of the debugger architecture in Visual Studio Code.</p>
+<h2 id="debugger-overview"><a class="header" href="#debugger-overview">Debugger overview</a></h2>
+<p>Visual Studio Code implements a generic user interface to debuggers.
+A developer needs to learn only one user interface to use any debugger
+supported by VS Code.
+For example, using the debug toolbar</p>
+<center>
+<img src="https://code.visualstudio.com/assets/docs/editor/debugging/toolbar.png">
+</center>
+<p>a developer can run the program to a breakpoint, step over a function call, step into a function call,
+step out of a function call, restart the program, and stop the program.
+Adding a new debugger to VS Code involves writing a new VS Code extension that tells VS Code how to
+drive the debugger.</p>
+<p>The
+<a href="https://code.visualstudio.com/api/extension-guides/debugger-extension#debugging-architecture-of-vs-code">debugging architecture</a>
+of Visual Studio Code is described in the
+<a href="https://code.visualstudio.com/api/extension-guides/debugger-extension">Debugger Extension</a>
+guide.
+In this architecture, a debug adapter sits between VS Code and the debugger.</p>
+<center>
+<img src="https://code.visualstudio.com/assets/api/extension-guides/debugger-extension/debug-arch1.png">
+</center>
+<p>The role of the debug adapter is to receive a request from VS Code,
+to drive or interrogate the debugger on behalf of VS Code,
+and to send an appropriate response back to VS Code.
+The debug adapter also sends events to VS Code when certain events happen
+within the debugger (for example, when the debugger comes to a stopping point).</p>
+<p>VS Code communicates with the debug adapter using the
+<a href="https://microsoft.github.io/debug-adapter-protocol">Debug Adapter Protocol</a>.
+The <a href="https://microsoft.github.io/debug-adapter-protocol/specification">protocol specification</a>
+defines the set of requests, responses, and event notifications sent between VS Code and the
+debug adapter.
+The <a href="https://microsoft.github.io/debug-adapter-protocol/overview">protocol overview</a> gives a nice example
+of a sequence of requests and events that might be sent between VS Code and a debug adapter
+for gdb:</p>
+<center>
+<img src="https://microsoft.github.io/debug-adapter-protocol/img/init-launch.png">
+</center>
+<h2 id="debugger-documentation"><a class="header" href="#debugger-documentation">Debugger documentation</a></h2>
+<p>The <a href="https://code.visualstudio.com/docs">user documentation</a>
+is the place to start if you are unfamiliar with Visual Studio Code.  The
+<a href="https://code.visualstudio.com/docs/editor/codebasics">user guide</a>
+introduces the basic concepts like
+<a href="https://code.visualstudio.com/docs/editor/codebasics">editing</a>
+and
+<a href="https://code.visualstudio.com/docs/editor/debugging">debugging</a>.
+Most important are</p>
+<ul>
+<li>The
+<a href="https://code.visualstudio.com/docs/editor/debugging#_debug-actions">debug actions</a>
+that a software developer uses to interact with a debugger.</li>
+<li>The <a href="https://code.visualstudio.com/docs/editor/debugging#_launch-configurations">debug configuration</a>
+that a software developer uses to select a debugger.</li>
+</ul>
+<p>The <a href="https://code.visualstudio.com/api">developer documentation</a> is the place
+for extension developers to start.
+Most important is</p>
+<ul>
+<li>The
+<a href="https://code.visualstudio.com/api/extension-guides/debugger-extension">debugger extension</a>
+overview gives a fairly complete example of how to write and package a debugger
+extension.
+The code repository used in that example was the starting point for this debugger.</li>
+</ul>
+<p>You should now be able to read the code implementing this debugger,
+but you will eventually want to skim</p>
+<ul>
+<li>
+<p>The
+<a href="https://code.visualstudio.com/api/extension-guides/overview">Extension Guides</a>
+that describe the Visual Studio Code Extension APIs.
+This debugger uses</p>
+<ul>
+<li><a href="https://code.visualstudio.com/api/extension-guides/tree-view">Tree Views</a>
+to display the code issues having traces available for debugging.</li>
+</ul>
+</li>
+<li>
+<p>The <a href="https://code.visualstudio.com/api/ux-guidelines/overview">UX Guidelines</a>
+that describe the Visual Studio Code user interface.  This debugger uses</p>
+<ul>
+<li><a href="https://code.visualstudio.com/api/ux-guidelines/views">Views</a>
+as containers of the content that appears in sidebars and panels,</li>
+<li><a href="https://code.visualstudio.com/api/ux-guidelines/sidebars">Sidebars</a>
+and
+<a href="https://code.visualstudio.com/api/ux-guidelines/panel">Panels</a>
+to display views, and</li>
+<li><a href="https://code.visualstudio.com/api/ux-guidelines/notifications">Notifications</a>
+to display progress and error messages.</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="implementation"><a class="header" href="#implementation">Implementation</a></h1>
+<p>This is an overview of the objects in the implementation and the source files
+that define these objects.</p>
+<h2 id="values"><a class="header" href="#values">Values</a></h2>
+<p>A value can be a string, a number, a struct, or an array.  A value can appear in a trace or be stored in memory.
+A value is represented in CBMC output as a string that must be parsed.</p>
+<ul>
+<li>value.ts: Defines the Value class and subclasses for strings, number, structs, and arrays.</li>
+<li>valueLexer.ts: A lexer for values in CBMC output.</li>
+<li>valueParser.ts: A parser for values in CBMC output.</li>
+</ul>
+<h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
+<p>A variable in a trace is a string like 'foo.bar[0]` consisting of a base name 'foo'
+followed by a list of selectors like field member selection '.bar' or array
+indexing '[0]'.
+We model memory as a single struct, so 'foo.bar[0]' is modeled as 'MEMORY.foo.bar[0]'.
+We think of '.foo.bar[0]' as a path through memory, where path elements
+denote field selection and array indexing.
+A variable is represented in CBMC output as a string that must be parsed.</p>
+<ul>
+<li>variable.ts: Defines the Element class and subclasses for field selection and array indexing.</li>
+<li>variableLexer.ts: A lexer for variables in CBMC output.</li>
+<li>variableParser.ts: A parser for variables in CBMC output.</li>
+</ul>
+<h2 id="failures"><a class="header" href="#failures">Failures</a></h2>
+<p>A panel at the bottom of the screen displays the set of failures that can be debugged.
+The failures are organized into a tree and displayed as
+nested lists of files, functions within a file, lines within a
+function, and failures at a line.
+The debug extension describes this tree to Visual Studio Code using the Tree View API.
+The key to the Tree View is the TreeDataProvider interface that includes
+functions like getChildren(node) returning a node's children and getTreeItem(node)
+returning a node's contents.
+So the debug extension must load the failures available for debugging,
+organize them into a tree,
+and use the tree to implement the TreeDataProvider interface.</p>
+<ul>
+<li>traceData.ts:
+The method create(result, property, loop) loads the summaries produced
+by cbmc-viewer and returns a mapping file_name -&gt; function_name -&gt; line_number -&gt; failure.</li>
+<li>traceTree.ts:
+The method create(mapping) transforms a failure mapping into a failure tree.</li>
+<li>traceView.ts:
+The class TraceProvider implements the TreeDataProvider.</li>
+</ul>
+<h2 id="debug-adapter"><a class="header" href="#debug-adapter">Debug adapter</a></h2>
+<p>The debug adapter sits between Visual Studio Code and the debugger.
+The job of the debug adapter is to accept requests from Visual Studio
+Code like &quot;set breakpoint&quot; and &quot;run&quot; and to generate responses after
+driving the debugger and inspecting its state.</p>
+<p>Visual Studio Code and the debug adapter communicate via requests and responses
+defined by the <a href="https://microsoft.github.io/debug-adapter-protocol">Debug Adapter Protocol</a>.
+Visual Studio Code sends the
+<a href="https://microsoft.github.io/debug-adapter-protocol/specification#Requests_SetBreakpoints">SetBreakpointsRequest</a>
+to the debug adapter which sends a SetBreakpointsResponse back to Visual Studio Code.</p>
+<p>The class ProofDebuggerSession implements the DebugSession interface.  It maintains the state of the
+debug adapter for one debugging session, and it implements methods like setBreakPointsRequest that
+Visual Studio Code can use to send the SetBreakpointsRequest and receive the SetBreapointsRepsonse.</p>
+<p>How the debug adapter and the debugger communicate is of no concern to Visual Studio Code.  In our case,
+the debugger is really just a trace simulator.  The debug adaptor uses methods in the simulator interface
+to move the simulator forwards and backwards in the trace, and to examine the current state of the trace.</p>
+<ul>
+<li>adapter.ts: Defines ProofDebuggerSession implementing the DebugSession interface.</li>
+</ul>
+<h2 id="debugger"><a class="header" href="#debugger">Debugger</a></h2>
+<ul>
+<li>simulator.ts: Simulator is the debugger being managed by the debug adpater</li>
+<li>simulatorState.ts: A state of a trace being simulated by the simulator</li>
+<li>simulatorTrace.ts: A trace being simulated by the simulator (and methods to load the trace)</li>
+</ul>
+<h2 id="extension-activation"><a class="header" href="#extension-activation">Extension activation</a></h2>
+<ul>
+<li>extension.ts: Methods to activate and deactive the debugger extension.</li>
+</ul>
+<h2 id="extension-utilities"><a class="header" href="#extension-utilities">Extension utilities</a></h2>
+<ul>
+<li>constants.ts: Defines string constants used in the extension</li>
+<li>exceptions.ts: Defines an exception raised by the extension</li>
+<li>storage.ts: Defines methods to access the persistent storage available to the extension</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently asked questions</a></h1>
+<p>If you have a question that is not answered here,
+please file an
+<a href="https://github.com/model-checking/cbmc-proof-debugger/issues">issue</a>
+with your question.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Implementation - CBMC Proof Debugger</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> CBMC Proof Debugger</a></li><li class="chapter-item expanded "><a href="../user-guide/index.html"><strong aria-hidden="true">2.</strong> User guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user-guide/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../user-guide/configuration.html"><strong aria-hidden="true">2.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../demo/index.html"><strong aria-hidden="true">2.3.</strong> Demonstration</a></li></ol></li><li class="chapter-item expanded "><a href="../developer-guide/index.html"><strong aria-hidden="true">3.</strong> Developer guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../developer-guide/installation.html"><strong aria-hidden="true">3.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../developer-guide/architecture.html"><strong aria-hidden="true">3.2.</strong> Architecture</a></li><li class="chapter-item expanded "><a href="../developer-guide/implementation.html" class="active"><strong aria-hidden="true">3.3.</strong> Implementation</a></li></ol></li><li class="chapter-item expanded "><a href="../faq/index.html"><strong aria-hidden="true">4.</strong> Frequently asked questions</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CBMC Proof Debugger</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="implementation"><a class="header" href="#implementation">Implementation</a></h1>
+<p>This is an overview of the objects in the implementation and the source files
+that define these objects.</p>
+<h2 id="values"><a class="header" href="#values">Values</a></h2>
+<p>A value can be a string, a number, a struct, or an array.  A value can appear in a trace or be stored in memory.
+A value is represented in CBMC output as a string that must be parsed.</p>
+<ul>
+<li>value.ts: Defines the Value class and subclasses for strings, number, structs, and arrays.</li>
+<li>valueLexer.ts: A lexer for values in CBMC output.</li>
+<li>valueParser.ts: A parser for values in CBMC output.</li>
+</ul>
+<h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
+<p>A variable in a trace is a string like 'foo.bar[0]` consisting of a base name 'foo'
+followed by a list of selectors like field member selection '.bar' or array
+indexing '[0]'.
+We model memory as a single struct, so 'foo.bar[0]' is modeled as 'MEMORY.foo.bar[0]'.
+We think of '.foo.bar[0]' as a path through memory, where path elements
+denote field selection and array indexing.
+A variable is represented in CBMC output as a string that must be parsed.</p>
+<ul>
+<li>variable.ts: Defines the Element class and subclasses for field selection and array indexing.</li>
+<li>variableLexer.ts: A lexer for variables in CBMC output.</li>
+<li>variableParser.ts: A parser for variables in CBMC output.</li>
+</ul>
+<h2 id="failures"><a class="header" href="#failures">Failures</a></h2>
+<p>A panel at the bottom of the screen displays the set of failures that can be debugged.
+The failures are organized into a tree and displayed as
+nested lists of files, functions within a file, lines within a
+function, and failures at a line.
+The debug extension describes this tree to Visual Studio Code using the Tree View API.
+The key to the Tree View is the TreeDataProvider interface that includes
+functions like getChildren(node) returning a node's children and getTreeItem(node)
+returning a node's contents.
+So the debug extension must load the failures available for debugging,
+organize them into a tree,
+and use the tree to implement the TreeDataProvider interface.</p>
+<ul>
+<li>traceData.ts:
+The method create(result, property, loop) loads the summaries produced
+by cbmc-viewer and returns a mapping file_name -&gt; function_name -&gt; line_number -&gt; failure.</li>
+<li>traceTree.ts:
+The method create(mapping) transforms a failure mapping into a failure tree.</li>
+<li>traceView.ts:
+The class TraceProvider implements the TreeDataProvider.</li>
+</ul>
+<h2 id="debug-adapter"><a class="header" href="#debug-adapter">Debug adapter</a></h2>
+<p>The debug adapter sits between Visual Studio Code and the debugger.
+The job of the debug adapter is to accept requests from Visual Studio
+Code like &quot;set breakpoint&quot; and &quot;run&quot; and to generate responses after
+driving the debugger and inspecting its state.</p>
+<p>Visual Studio Code and the debug adapter communicate via requests and responses
+defined by the <a href="https://microsoft.github.io/debug-adapter-protocol">Debug Adapter Protocol</a>.
+Visual Studio Code sends the
+<a href="https://microsoft.github.io/debug-adapter-protocol/specification#Requests_SetBreakpoints">SetBreakpointsRequest</a>
+to the debug adapter which sends a SetBreakpointsResponse back to Visual Studio Code.</p>
+<p>The class ProofDebuggerSession implements the DebugSession interface.  It maintains the state of the
+debug adapter for one debugging session, and it implements methods like setBreakPointsRequest that
+Visual Studio Code can use to send the SetBreakpointsRequest and receive the SetBreapointsRepsonse.</p>
+<p>How the debug adapter and the debugger communicate is of no concern to Visual Studio Code.  In our case,
+the debugger is really just a trace simulator.  The debug adaptor uses methods in the simulator interface
+to move the simulator forwards and backwards in the trace, and to examine the current state of the trace.</p>
+<ul>
+<li>adapter.ts: Defines ProofDebuggerSession implementing the DebugSession interface.</li>
+</ul>
+<h2 id="debugger"><a class="header" href="#debugger">Debugger</a></h2>
+<ul>
+<li>simulator.ts: Simulator is the debugger being managed by the debug adpater</li>
+<li>simulatorState.ts: A state of a trace being simulated by the simulator</li>
+<li>simulatorTrace.ts: A trace being simulated by the simulator (and methods to load the trace)</li>
+</ul>
+<h2 id="extension-activation"><a class="header" href="#extension-activation">Extension activation</a></h2>
+<ul>
+<li>extension.ts: Methods to activate and deactive the debugger extension.</li>
+</ul>
+<h2 id="extension-utilities"><a class="header" href="#extension-utilities">Extension utilities</a></h2>
+<ul>
+<li>constants.ts: Defines string constants used in the extension</li>
+<li>exceptions.ts: Defines an exception raised by the extension</li>
+<li>storage.ts: Defines methods to access the persistent storage available to the extension</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../developer-guide/architecture.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../faq/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../developer-guide/architecture.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../faq/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

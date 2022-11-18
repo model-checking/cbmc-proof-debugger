@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Architecture - CBMC Proof Debugger</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> CBMC Proof Debugger</a></li><li class="chapter-item expanded "><a href="../user-guide/index.html"><strong aria-hidden="true">2.</strong> User guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user-guide/installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../user-guide/configuration.html"><strong aria-hidden="true">2.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../demo/index.html"><strong aria-hidden="true">2.3.</strong> Demonstration</a></li></ol></li><li class="chapter-item expanded "><a href="../developer-guide/index.html"><strong aria-hidden="true">3.</strong> Developer guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../developer-guide/installation.html"><strong aria-hidden="true">3.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../developer-guide/architecture.html" class="active"><strong aria-hidden="true">3.2.</strong> Architecture</a></li><li class="chapter-item expanded "><a href="../developer-guide/implementation.html"><strong aria-hidden="true">3.3.</strong> Implementation</a></li></ol></li><li class="chapter-item expanded "><a href="../faq/index.html"><strong aria-hidden="true">4.</strong> Frequently asked questions</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CBMC Proof Debugger</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
+<p>This is a description of the debugger architecture in Visual Studio Code.</p>
+<h2 id="debugger-overview"><a class="header" href="#debugger-overview">Debugger overview</a></h2>
+<p>Visual Studio Code implements a generic user interface to debuggers.
+A developer needs to learn only one user interface to use any debugger
+supported by VS Code.
+For example, using the debug toolbar</p>
+<center>
+<img src="https://code.visualstudio.com/assets/docs/editor/debugging/toolbar.png">
+</center>
+<p>a developer can run the program to a breakpoint, step over a function call, step into a function call,
+step out of a function call, restart the program, and stop the program.
+Adding a new debugger to VS Code involves writing a new VS Code extension that tells VS Code how to
+drive the debugger.</p>
+<p>The
+<a href="https://code.visualstudio.com/api/extension-guides/debugger-extension#debugging-architecture-of-vs-code">debugging architecture</a>
+of Visual Studio Code is described in the
+<a href="https://code.visualstudio.com/api/extension-guides/debugger-extension">Debugger Extension</a>
+guide.
+In this architecture, a debug adapter sits between VS Code and the debugger.</p>
+<center>
+<img src="https://code.visualstudio.com/assets/api/extension-guides/debugger-extension/debug-arch1.png">
+</center>
+<p>The role of the debug adapter is to receive a request from VS Code,
+to drive or interrogate the debugger on behalf of VS Code,
+and to send an appropriate response back to VS Code.
+The debug adapter also sends events to VS Code when certain events happen
+within the debugger (for example, when the debugger comes to a stopping point).</p>
+<p>VS Code communicates with the debug adapter using the
+<a href="https://microsoft.github.io/debug-adapter-protocol">Debug Adapter Protocol</a>.
+The <a href="https://microsoft.github.io/debug-adapter-protocol/specification">protocol specification</a>
+defines the set of requests, responses, and event notifications sent between VS Code and the
+debug adapter.
+The <a href="https://microsoft.github.io/debug-adapter-protocol/overview">protocol overview</a> gives a nice example
+of a sequence of requests and events that might be sent between VS Code and a debug adapter
+for gdb:</p>
+<center>
+<img src="https://microsoft.github.io/debug-adapter-protocol/img/init-launch.png">
+</center>
+<h2 id="debugger-documentation"><a class="header" href="#debugger-documentation">Debugger documentation</a></h2>
+<p>The <a href="https://code.visualstudio.com/docs">user documentation</a>
+is the place to start if you are unfamiliar with Visual Studio Code.  The
+<a href="https://code.visualstudio.com/docs/editor/codebasics">user guide</a>
+introduces the basic concepts like
+<a href="https://code.visualstudio.com/docs/editor/codebasics">editing</a>
+and
+<a href="https://code.visualstudio.com/docs/editor/debugging">debugging</a>.
+Most important are</p>
+<ul>
+<li>The
+<a href="https://code.visualstudio.com/docs/editor/debugging#_debug-actions">debug actions</a>
+that a software developer uses to interact with a debugger.</li>
+<li>The <a href="https://code.visualstudio.com/docs/editor/debugging#_launch-configurations">debug configuration</a>
+that a software developer uses to select a debugger.</li>
+</ul>
+<p>The <a href="https://code.visualstudio.com/api">developer documentation</a> is the place
+for extension developers to start.
+Most important is</p>
+<ul>
+<li>The
+<a href="https://code.visualstudio.com/api/extension-guides/debugger-extension">debugger extension</a>
+overview gives a fairly complete example of how to write and package a debugger
+extension.
+The code repository used in that example was the starting point for this debugger.</li>
+</ul>
+<p>You should now be able to read the code implementing this debugger,
+but you will eventually want to skim</p>
+<ul>
+<li>
+<p>The
+<a href="https://code.visualstudio.com/api/extension-guides/overview">Extension Guides</a>
+that describe the Visual Studio Code Extension APIs.
+This debugger uses</p>
+<ul>
+<li><a href="https://code.visualstudio.com/api/extension-guides/tree-view">Tree Views</a>
+to display the code issues having traces available for debugging.</li>
+</ul>
+</li>
+<li>
+<p>The <a href="https://code.visualstudio.com/api/ux-guidelines/overview">UX Guidelines</a>
+that describe the Visual Studio Code user interface.  This debugger uses</p>
+<ul>
+<li><a href="https://code.visualstudio.com/api/ux-guidelines/views">Views</a>
+as containers of the content that appears in sidebars and panels,</li>
+<li><a href="https://code.visualstudio.com/api/ux-guidelines/sidebars">Sidebars</a>
+and
+<a href="https://code.visualstudio.com/api/ux-guidelines/panel">Panels</a>
+to display views, and</li>
+<li><a href="https://code.visualstudio.com/api/ux-guidelines/notifications">Notifications</a>
+to display progress and error messages.</li>
+</ul>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../developer-guide/installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../developer-guide/implementation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../developer-guide/installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../developer-guide/implementation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
