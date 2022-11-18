@@ -7,7 +7,7 @@ publish:
 	$(VSCE) publish
 
 install:
-	code --install-extension proof-debugger-*.vsix
+	code --install-extension cbmc-proof-debugger-*.vsix
 
 format:
 	./node_modules/.bin/tsfmt -r src/*.ts

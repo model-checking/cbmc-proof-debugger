@@ -1,7 +1,7 @@
 {
   "name": "cbmc-proof-debugger",
   "displayName": "CBMC proof debugger",
-  "description": "Debug error traces produced by cbmc.",
+  "description": "Debug error traces produced by CBMC.",
   "publisher": "model-checking",
   "version": "0.1.0",
   "repository": "https://github.com/model-checking/cbmc-proof-debugger",
@@ -41,19 +41,19 @@
     "commands": [
       {
         "command": "proofDebugger.load",
-        "title": "Proof debugger: Load extension"
+        "title": "CBMC proof debugger: Load extension"
       },
       {
         "command": "proofDebugger.setTraceFolderDialog",
-        "title": "Proof debugger: Set Trace Folder"
+        "title": "CBMC proof debugger: Set Trace Folder"
       },
       {
         "command": "proofDebugger.showTraceFolder",
-        "title": "Proof debugger: Show Trace Folder"
+        "title": "CBMC proof debugger: Show Trace Folder"
       },
       {
         "command": "proofDebugger.showTraceName",
-        "title": "Proof debugger: Show Trace Name"
+        "title": "CBMC proof debugger: Show Trace Name"
       },
       {
         "command": "traceView.refresh",
@@ -72,7 +72,7 @@
     "debuggers": [
       {
         "type": "proof-debugger",
-        "label": "Proof debugger",
+        "label": "CBMC Proof Debugger",
         "program": "./out/proof-debugger-adapter.js",
         "runtime": "node",
         "languages": [
@@ -100,18 +100,18 @@
           {
             "type": "proof-debugger",
             "request": "launch",
-            "name": "Proof debugger debug",
+            "name": "CBMC Proof Debugger",
             "stopOnEntry": true
           }
         ],
         "configurationSnippets": [
           {
-            "label": "Proof debugger: Launch",
-            "description": "A configuration for debugging an error trace produced by cbmc.",
+            "label": "CBMC Proof Debugger: Launch",
+            "description": "A configuration for debugging an error trace produced by CBMC.",
             "body": {
               "type": "proof-debugger",
               "request": "launch",
-              "name": "Proof debugger",
+              "name": "CBMC Proof Debugger",
               "stopOnEntry": true
             }
           }
