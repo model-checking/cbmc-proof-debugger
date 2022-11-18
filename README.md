@@ -2,10 +2,11 @@
 
 The
 [CBMC Proof Debugger](https://github.com/model-checking/cbmc-proof-debugger)
-is a debugger for
+is a
 [Visual Studio Code](https://code.visualstudio.com/)
-for debugging error traces from
-[CBMC](https://github.com/diffblue/cbmc).
+debugger for
+[CBMC](https://github.com/diffblue/cbmc)
+error traces.
 
 [CBMC](https://github.com/diffblue/cbmc)
 is a model checker for C.  CBMC will explore all possible paths
@@ -32,6 +33,8 @@ The
 loads the json summaries produced by CBMC Viewer,
 and lets a developer explore the error traces produced by CBMC using
 the Visual Studio Code's debugger.
+
+The [user guide]() includes a [simple demonstration]() of the debugger.
 
 ## Security
 
