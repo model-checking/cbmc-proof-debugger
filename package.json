@@ -3,7 +3,7 @@
   "displayName": "CBMC proof debugger",
   "description": "Debug error traces produced by CBMC.",
   "publisher": "model-checking",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "https://github.com/model-checking/cbmc-proof-debugger",
   "engines": {
     "vscode": "^1.53.0"
