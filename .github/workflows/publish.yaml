@@ -1,6 +1,10 @@
 name: Publish CBMC Proof Debugger documentation
 on: [push, pull_request]
 
+permissions:
+  contents: write
+  pages: write
+
 jobs:
   publish:
     runs-on: macos-latest
