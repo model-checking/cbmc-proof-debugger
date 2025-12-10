@@ -129,7 +129,7 @@
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
-    "@types/mocha": "^9.0.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^24.10.2",
     "@types/vscode": "^1.106.1",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
