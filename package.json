@@ -131,7 +131,7 @@
     "@types/glob": "^9.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.9.1",
-    "@types/vscode": "^1.120.0",
+    "@types/vscode": "^1.53.0",
     "@typescript-eslint/eslint-plugin": "^8.60.1",
     "@typescript-eslint/parser": "^8.60.1",
     "@vscode/test-electron": "^2.5.2",
