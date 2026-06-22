@@ -41,7 +41,7 @@ jobs:
     steps:
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Validate release and tagged version numbers
         # $GITHUB_REF is refs/tags/debugger-VERSION
