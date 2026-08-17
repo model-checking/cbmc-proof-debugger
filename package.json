@@ -136,7 +136,7 @@
     "@typescript-eslint/parser": "^8.66.0",
     "@vscode/test-electron": "^3.1.0",
     "console": "^0.7.2",
-    "eslint": "^10.8.0",
+    "eslint": "^10.8.1",
     "glob": "^13.0.6",
     "mocha": "^11.8.0",
     "typescript": "^7.0.2",
